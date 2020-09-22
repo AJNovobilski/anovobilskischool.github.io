@@ -1,0 +1,52 @@
+svg {
+    overflow: hidden;
+    vertical-align: middle;
+    text-align: center;
+    display: block;
+    margin: auto;
+    padding-top: 50px;
+}
+svg:hover {
+    background-color: skyblue !important;
+}
+h2 {
+
+    text-align: center;
+    color: linen;
+}
+h3 {
+
+    font-size: .98rem !important;
+    text-align: center;
+
+}
+.col-6 {
+
+    max-width: 100% !important;
+    flex: 0 0 100% !important;
+}
+body {
+
+    background-color: lightslategray !important;
+}
+a {
+
+    color: silver !important;
+}
+a:hover {
+
+    color: seashell !important;
+}
+h4 {
+
+    font-size: .88rem !important;
+    color: whitesmoke;
+}
+.col1 {
+    -ms-flex-preferred-size: 0;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    max-width: 150%;
+    background: whitesmoke;
+}
+.col1.outset {border-style: outset;}
