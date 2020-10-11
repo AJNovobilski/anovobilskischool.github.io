@@ -1,64 +1,160 @@
-var characterAmountRange = document.getElementById('characterAmountRange')
-var characterAmountNumber = document.getElementById('characterAmountNumber')
-var includeUppercaseElement = document.getElementById('includeUppercase')
-var includeNumbersElement = document.getElementById('includeNumbers')
-var includeSymbolsElement = document.getElementById('includeSymbols')
-var form = document.getElementById('passwordGeneratorForm')
-var passwordDisplay = document.getElementById('passwordDisplay')
+const startButton = document.getElementById('start-btn')
+const nextButton = document.getElementById('next-btn')
+const questionContainerElement = document.getElementById('question-container')
+const questionElement = document.getElementById('question')
+const answerButtonsElement = document.getElementById('answer-buttons')
+var timer = document.querySelector("#time");
+var scoredoc = document.querySelector("#score")
 
-var UPPERCASE_CHAR_CODES = arrayFromLowToHigh(65, 90)
-var LOWERCASE_CHAR_CODES = arrayFromLowToHigh(97, 122)
-var NUMBER_CHAR_CODES = arrayFromLowToHigh(48, 57)
-var SYMBOL_CHAR_CODES = arrayFromLowToHigh(33, 47).concat(
-  arrayFromLowToHigh(58, 64)
-).concat(
-  arrayFromLowToHigh(91, 96)
-).concat(
-  arrayFromLowToHigh(123, 126)
-)
 
-characterAmountNumber.addEventListener('input', syncCharacterAmount)
-characterAmountRange.addEventListener('input', syncCharacterAmount)
+var score = 0;
 
-form.addEventListener('submit', e => {
-  e.preventDefault()
-  var characterAmount = characterAmountNumber.value
-  var includeUppercase = includeUppercaseElement.checked
-  var includeNumbers = includeNumbersElement.checked
-  var includeSymbols = includeSymbolsElement.checked
-  var password = generatePassword(characterAmount, includeUppercase, includeNumbers, includeSymbols)
-  passwordDisplay.innerText = password
+var secondsLeft = 60;
+
+let shuffledQuestions, currentQuestionIndex
+
+startButton.addEventListener('click', startGame)
+nextButton.addEventListener('click', () => {
+  currentQuestionIndex++
+  setNextQuestion()
 })
 
-function generatePassword(characterAmount, includeUppercase, includeNumbers, includeSymbols) {
-  let charCodes = LOWERCASE_CHAR_CODES
 
-  console.log(LOWERCASE_CHAR_CODES)
-  console.log(UPPERCASE_CHAR_CODES)
-  console.log(SYMBOL_CHAR_CODES)
+function setTime() {
+  var timerInterval = setInterval(function() {
+      secondsLeft--;
+      timer.textContent = secondsLeft;
 
-  if (includeUppercase) charCodes = charCodes.concat(UPPERCASE_CHAR_CODES)
-  if (includeSymbols) charCodes = charCodes.concat(SYMBOL_CHAR_CODES)
-  if (includeNumbers) charCodes = charCodes.concat(NUMBER_CHAR_CODES)
-  
-  var passwordCharacters = []
-  for (let i = 0; i < characterAmount; i++) {
-    var characterCode = charCodes[Math.floor(Math.random() * charCodes.length)]
-    passwordCharacters.push(String.fromCharCode(characterCode))
+      if(secondsLeft === 0) {
+      clearInterval(timerInterval);
+      sendMessage();
+      }
+
+  }, 1000);
   }
-  return passwordCharacters.join('')
+
+function sendMessage() {
+  timer.textContent = "End of Quiz";
+  timer.style.color = "red";
+  setInterval(function() {
+  }, 500);
 }
 
-function arrayFromLowToHigh(low, high) {
-  var array = []
-  for (let i = low; i <= high; i++) {
-    array.push(i)
+function setscore() {
+
+  scoredoc.textContent = score;
+
+  console.log(scoredoc)
+
+
+}
+
+
+setTime();
+
+
+function startGame() {
+  startButton.classList.add('hide')
+  shuffledQuestions = questions.sort(() => Math.random() - .5)
+  currentQuestionIndex = 0
+  questionContainerElement.classList.remove('hide')
+  setNextQuestion()
+}
+
+function setNextQuestion() {
+  resetState()
+  showQuestion(shuffledQuestions[currentQuestionIndex])
+}
+
+function showQuestion(question) {
+  questionElement.innerText = question.question
+  question.answers.forEach(answer => {
+    const button = document.createElement('button')
+    button.innerText = answer.text
+    button.classList.add('btn')
+    if (answer.correct) {
+      button.dataset.correct = answer.correct
+    }
+
+    if (answer.correct) {
+
+      scoredoc = score + 100;
+
+
+    }
+    button.addEventListener('click', selectAnswer)
+    answerButtonsElement.appendChild(button)
+  })
+}
+
+function resetState() {
+  clearStatusClass(document.body)
+  nextButton.classList.add('hide')
+  while (answerButtonsElement.firstChild) {
+    answerButtonsElement.removeChild(answerButtonsElement.firstChild)
   }
-  return array
 }
 
-function syncCharacterAmount(e) {
-  var value = e.target.value
-  characterAmountNumber.value = value
-  characterAmountRange.value = value
+function selectAnswer(e) {
+  const selectedButton = e.target
+  const correct = selectedButton.dataset.correct
+  setStatusClass(document.body, correct)
+  Array.from(answerButtonsElement.children).forEach(button => {
+    setStatusClass(button, button.dataset.correct)
+  })
+  if (shuffledQuestions.length > currentQuestionIndex + 1) {
+    nextButton.classList.remove('hide')
+  } else {
+    startButton.innerText = 'Restart'
+    startButton.classList.remove('hide')
+  }
 }
+
+function setStatusClass(element, correct) {
+  clearStatusClass(element)
+  if (correct) {
+    element.classList.add('correct')
+  } else {
+    element.classList.add('wrong')
+  }
+}
+
+function clearStatusClass(element) {
+  element.classList.remove('correct')
+  element.classList.remove('wrong')
+}
+
+const questions = [
+  {
+    question: 'What is 5 + 5?',
+    answers: [
+      { text: '10', correct: true },
+      { text: '55', correct: false }
+    ]
+  },
+  {
+    question: 'Who is the best instructor?',
+    answers: [
+      { text: 'Chad', correct: true },
+      { text: 'Lee', correct: true },
+      { text: 'Alexis', correct: true },
+      { text: 'Substitute Guy', correct: true }
+    ]
+  },
+  {
+    question: 'What does JSON stand for?',
+    answers: [
+      { text: 'Jerry Springer Online Network', correct: false },
+      { text: 'Javascript Object Notation', correct: true },
+      { text: 'Joomla Standard Object Notation', correct: false },
+      { text: 'IDK', correct: false }
+    ]
+  },
+  {
+    question: 'What is 4 * 2?',
+    answers: [
+      { text: '6', correct: false },
+      { text: '8', correct: true }
+    ]
+  }
+]
