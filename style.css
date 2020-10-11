@@ -249,3 +249,13 @@ p.main-text {
       margin-right: auto;
   }
 }
+
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+table {
+  margin: auto;
+  margin-top: 50px;
+}

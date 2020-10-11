@@ -7,7 +7,6 @@
   const questionElement = document.getElementById('question');
   const answerButtonsElement = document.getElementById('answer-buttons');
   const resultForm = document.getElementById('form-result');
-  var timer = document.querySelector("#time");
 
 
   
@@ -16,6 +15,8 @@
   let currentQuestion = 1;
 
   var secondsLeft = 60;
+  var timer = document.querySelector("#time");
+
 
 
 function setTime() {
@@ -106,26 +107,38 @@ function setTime() {
     Array.from(answerButtonsElement.children).forEach(button => {
       setStatusClass(button, button.dataset.correct);
     })
-  
+    
+    
+        if (selectedButton.dataset = correct) {
+      countRightAnswers++; //+1
+    }
+    
+  //end game
     if (shuffledQuestions.length > currentQuestionIndex + 1) {
       nextButton.classList.remove('hide');
+
     } else {
-  
+
+      
+        
+      
+      
       resultForm.classList.remove('hide');
       questionContainerElement.classList.add('hide');
   
       startButton.innerText = 'Repeat'; 
       startButton.classList.remove('hide'); 
+      
+              var initials = prompt("Please enter your initials", "AN");
+       document.getElementById("highscore").innerHTML =
+      "Congradulations " + initials + "! Your Score Was " + countRightAnswers ;
     }
   
   
-    //2. if the answer is correct
-    if (selectedButton.dataset = correct) {
-      countRightAnswers++; //+1
-    }
+   // answer is correct
 
-  
-    //5. to show the score inside <span>
+
+  //count right answers
     document.getElementById('right-answers').innerHTML = countRightAnswers; 
     document.getElementById('answers-percent').innerHTML = ((100 * countRightAnswers)/questions.length).toFixed(0);
     //prevent multiclicking 
