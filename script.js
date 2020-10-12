@@ -9,6 +9,8 @@
   const resultForm = document.getElementById('form-result');
 
 
+
+
   
   let countRightAnswers = 0; //1. let's count the right answers
   let shuffledQuestions, currentQuestionIndex;
@@ -26,13 +28,14 @@ function setTime() {
 
       if(secondsLeft === 0) {
       clearInterval(timerInterval);
-      sendMessage();
       }
 
   }, 1000);
   }
+//latest score
+  const latest = localStorage.getItem('score');
+  console.log(latest)
 
-  
   
   startButton.addEventListener('click', startGame);
 
@@ -121,7 +124,9 @@ function setTime() {
 
       
         
-      
+      const userscore = countRightAnswers
+      console.log(userscore);
+      localStorage.setItem("score", JSON.stringify(userscore));
       
       resultForm.classList.remove('hide');
       questionContainerElement.classList.add('hide');
@@ -132,6 +137,11 @@ function setTime() {
               var initials = prompt("Please enter your initials", "AN");
        document.getElementById("highscore").innerHTML =
       "Congradulations " + initials + "! Your Score Was " + countRightAnswers ;
+      const latestscore = localStorage.getItem('score');
+
+console.log(latestscore)
+
+document.getElementById('output').innerHTML = latestscore;
     }
   
   
@@ -160,6 +170,8 @@ function setTime() {
     element.classList.remove('correct');
     element.classList.remove('wrong');
   }
+
+
 
 const questions = [
   {
@@ -195,4 +207,6 @@ const questions = [
     ]
   }
 ]
+
+
 
