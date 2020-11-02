@@ -25,9 +25,11 @@ console.log(localsearch);
     cityarray = [];
   } else {
     cityarray = JSON.parse(localStorage.getItem('cities'));
+    console.log(cityarray[cityarray.length - 1])
+
   }
 
-  console.log(cityarray)
+  console.log(cityarray[cityarray.length - 1])
 
   cityarray.push(localsearch)
 
@@ -37,12 +39,15 @@ console.log(localsearch);
 $(document).ready(function() {
   $('#searchcity').append(
     $('<div>').prop({
-      id: 'citydiv',
-      innerHTML: cityarray,
+      id: 'city_' + cityarray[cityarray - 1],
+      innerHTML: cityarray[cityarray.length - 1],
       className: 'border pad'
+      
+      
     })
   );
 });
+
 
 }
 function ajax1(){
